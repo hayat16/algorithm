@@ -1,0 +1,91 @@
+#include<bits/stdc++.h>
+#include<iostream>
+using namespace std;
+const int p=5;
+const int r=3;
+int safty(int Allocation[p][r],int ma[p][r],int Available[p][r],int need[p][r])
+{
+    int work[100][100];
+    int i,j,c,f;
+    int safe_sequence[p];
+    bool finish[p];
+    for(j=0; j<r; j++)
+    {
+        work[0][j]=Available[0][j];
+    }
+    for( i=0; i<p; i++)
+    {
+        finish[i]=false;
+    }
+    c=0;
+    while(c<p)
+    {
+        for( i=0; i<p; i++)
+        {
+            if(finish[i]==false)
+            {
+                f=0;
+                for(j=0; j<r; j++)
+                {
+                    if(need[i][j]<=work[0][j])
+                    {
+                        f++;
+                    }
+                }
+                if(f==r)
+                {
+                    for(j=0; j<r; j++)
+                    {
+                        finish[i]=true;
+                        work[0][j]=work[0][j]+Allocation[i][j];
+                    }
+                    safe_sequence[c++]=i;
+                }
+            }
+        }
+    }
+    cout<<"System is in safe state."<<endl<<"sequence is: ";
+    for(i=0; i<c; i++)
+    {
+        cout<<safe_sequence[i]<<" ";
+    }
+}
+int main()
+{
+    int j;
+    int Allocation[p][r]= {{0,1,0},{2,0,0},{3,0,2},{2,1,1},{0,0,2}};
+    int ma[p][r]= {{7,5,3},{3,2,2},{9,0,2},{2,2,2},{4,3,3}};
+    int Available[p][r]= {{3,3,2}};
+    int request[][r]= {{1,0,2}};
+    int request_process=1;
+    int need[p][r];
+    for(int i=0; i<p; i++)
+    {
+        for(j=0; j<r; j++)
+        {
+            need[i][j]=ma[i][j]-Allocation[i][j];
+        }
+    }
+    for(j=0; j<r; j++)
+    {
+        if(request[0][j]<=need[request_process][j])
+        {
+            if(request[0][j]<=Available[0][j])
+            {
+                Available[0][j]=Available[0][j]-request[0][j];
+                Allocation[request_process][j]=Allocation[request_process][j]+request[0][j];
+                need[request_process][j]=need[request_process][j]-request[0][j];
+            }
+        }
+    }
+    for(int i=0; i<p; i++)
+    {
+        for(j=0; j<r; j++)
+        {
+            cout<<Allocation[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    safty(Allocation,ma,Available,need);
+    return 0;
+}
