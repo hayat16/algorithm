@@ -7,7 +7,7 @@ int bfs(int src)
     dist[src]=0;
     queue<int>q;
     q.push(src);
-    cout<<"Sorted list : ";
+    cout<<"searching way : ";
     while(!q.empty())
     {
         int u=q.front();
